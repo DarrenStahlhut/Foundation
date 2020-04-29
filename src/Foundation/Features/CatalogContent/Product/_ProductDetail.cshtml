@@ -20,6 +20,9 @@
                 <h5>@Html.PropertyFor(x => x.Variant.DisplayName)</h5>
                 <h6 class="light-text">@Html.PropertyFor(x => x.Product.Brand)</h6>
                 <p class="sub-title">@Model.Variant.Code</p>
+                <p>
+                    You will get @Model.Points Points after purchasing. 
+                </p>
             </div>
 
             <hr />
@@ -59,9 +62,9 @@
 
             <br />
             @Html.PropertyFor(x => x.CurrentContent.Description)
-
             <br />
             <hr />
+
             <div class="row product-detail__selection">
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <label class="title">@Html.TranslateFallback("/ProductPage/VariationSelection/Color", "Colors")</label>
@@ -122,6 +125,9 @@
                     }
                 </div>
             </div>
+            <br />
+            <hr />
+            @{Html.RenderAction("Index", "ReferProduct");}
             @Html.Partial("_SocialIconsListing", Model.CurrentContent.DisplayName)
         </div>
     </div>

@@ -1,0 +1,56 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#myRewards").change(function () {
+                var rewardid = $(this).find(":selected").val();
+                var name = $(this).find(":selected").html()
+                //var selectval = { "couponCode": name }
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/Checkout/AddCouponCode",
+                    //data: { couponCode: name },
+                    data: { currentPage: '9', couponCode: name, rewardid: rewardid },
+                    success: function (result) {
+
+                        if (!result) {
+                            $('.couponcode-errormessage').show();
+                            return;
+                        }
+                        $('.couponcode-errormessage').hide();
+                        $("#CheckoutView").html($(result));
+
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    @if (ViewBag.myCartPoints != null)
+
+    {
+        <div style="float:left;width:100%"> You will Earn @ViewBag.myCartPoints Points.  </div>
+    }
+
+    @if (ViewBag.myRewards != null)
+
+    {
+        <div align="right">
+            <div style="float:left;width:50%"> Redeem Loyalty Reward </div>
+            <div style="float:left;width:50%"> - @Html.DropDownList("myRewards", (IEnumerable<SelectListItem>)ViewBag.MySkills, "-- Select --")</div>
+
+        </div>
+
+    }
+</body>
+</html>

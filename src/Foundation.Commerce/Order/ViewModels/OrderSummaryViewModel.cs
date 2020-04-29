@@ -1,5 +1,6 @@
 using Mediachase.Commerce;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace Foundation.Commerce.Order.ViewModels
 {
@@ -15,5 +16,9 @@ namespace Foundation.Commerce.Order.ViewModels
         public Money ShippingTaxTotal { get; set; }
         public Money CartTotal { get; set; }
         public decimal PaymentTotal { get; set; }
+
+        public List<SelectListItem> Rewards { get; set; }
+        public string Reward { get; set; }
+        public string Points { get; set; }
     }
 }

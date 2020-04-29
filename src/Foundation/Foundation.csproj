@@ -66,6 +66,15 @@
     <Reference Include="AjaxControlToolkit, Version=3.0.30930.28736, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EPiServer.Commerce.Core.13.7.1\lib\net461\AjaxControlToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="AnnexCloud.Loyalty, Version=1.0.7200.28847, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AnnexCloudLoyalty.1.0.7200.28847\lib\net45\AnnexCloud.Loyalty.dll</HintPath>
+    </Reference>
+    <Reference Include="AnnexCloud.RAF, Version=1.0.7187.27886, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AnnexCloudRAF.1.0.7187.27886\lib\net45\AnnexCloud.RAF.dll</HintPath>
+    </Reference>
+    <Reference Include="AnnexCloud.Saletrack, Version=1.0.7185.27656, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AnnexCloudSaletrack.1.0.7185.27656\lib\net45\AnnexCloud.Saletrack.dll</HintPath>
+    </Reference>
     <Reference Include="AuthorizeNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\AuthorizeNet.1.9.4\lib\AuthorizeNet.dll</HintPath>
     </Reference>
@@ -509,6 +518,9 @@
     <Reference Include="ImageProcessor.Web.Episerver, Version=5.3.2.36675, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ImageProcessor.Web.Episerver.5.3.2.36675\lib\net461\ImageProcessor.Web.Episerver.dll</HintPath>
     </Reference>
+    <Reference Include="ImageProcessor.Web.Episerver.Azure, Version=5.3.2.31348, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ImageProcessor.Web.Episerver.Azure.5.3.2.31348\lib\net461\ImageProcessor.Web.Episerver.Azure.dll</HintPath>
+    </Reference>
     <Reference Include="InsightFormFieldMapper, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\InsightFormFieldMapper.1.1.2\lib\net45\InsightFormFieldMapper.dll</HintPath>
     </Reference>
@@ -921,6 +933,9 @@
     </Compile>
     <Compile Include="Helpers\ImageUrlHelpers.cs" />
     <Compile Include="Helpers\WebPHelper.cs" />
+    <Compile Include="Infrastructure\AnnexOrderDiscount.cs" />
+    <Compile Include="Infrastructure\AnnexOrderDiscountProcessor.cs" />
+    <Compile Include="Infrastructure\ExtendedPropertiesExtensions.cs" />
     <Compile Include="Infrastructure\Jobs\BlobJob.cs" />
     <Compile Include="Infrastructure\Jobs\DemoIntegrationJob.cs" />
     <Compile Include="Infrastructure\Kpi\FilledInFormKpi.cs" />
@@ -1200,7 +1215,6 @@
     <Content Include="Assets\scss\vendors\gijgo\fonts\gijgo-material.svg" />
     <Content Include="Assets\scss\vendors\jquery\jquery-ui.css" />
     <Content Include="Assets\scss\vendors\mvc-grid\mvc-grid.css" />
-    <Content Include="Assets\scss\vendors\reset.css" />
     <Content Include="Assets\scss\vendors\spur-admin\spur.min.css" />
     <Content Include="Assets\scss\vendors\tinymce-font-awesome\tinymce-font-awesome.css" />
     <Content Include="ClientResources\Scripts\ContentEditing\CreateContent.js" />
@@ -1217,7 +1231,8 @@
     <Content Include="Features\Category\Index.cshtml" />
     <Content Include="Features\Category\_PageListing.cshtml" />
     <Content Include="Features\Category\_Preview.cshtml" />
-    <None Include="Features\Checkout\_OrderSummary.cshtml" />
+    <Content Include="Features\Checkout\Rewards.cshtml" />
+    <Content Include="Features\Checkout\_OrderSummary.cshtml" />
     <Content Include="Features\CatalogContent\_Rating.cshtml" />
     <Content Include="Features\MyOrganization\Orders\Index.cshtml" />
     <Content Include="Features\NamedCarts\Wishlist\Index.cshtml" />
@@ -1487,8 +1502,7 @@
     <Content Include="Assets\scss\vendors\bootstrap-4.3.1\_type.scss" />
     <Content Include="Assets\scss\vendors\bootstrap-4.3.1\_utilities.scss" />
     <Content Include="Assets\scss\vendors\bootstrap-4.3.1\_variables.scss" />
-    <Content Include="App_Data\GeoLiteCity.dat" />
-    <None Include="EPiServerLog.config" />
+    <Content Include="EPiServerLog.config" />
     <Content Include="modules\_protected\CookieDropBlock\Views\web.config" />
     <Content Include="modules\_protected\CookieDropBlock\Views\CookieDropBlock.cshtml" />
     <Content Include="modules\_protected\EPiServer.GoogleAnalytics\Views\Web.config" />
@@ -1758,6 +1772,7 @@
     <Content Include="modules\_protected\EPiServer.Commerce.Shell\EPiServer.Commerce.Shell.zip" />
     <Content Include="modules\_protected\Commerce\Commerce.zip" />
     <Content Include="modules\_protected\EPiServer.Commerce.UI.CustomerService\EPiServer.Commerce.UI.CustomerService.zip" />
+    <Content Include="License.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -1776,6 +1791,19 @@
     <Content Include="Views\VirtualTemplates\Shared\PanelTitle.cshtml" />
     <Content Include="Views\VirtualTemplates\Shared\VersionList.cshtml" />
     <Content Include="Views\VirtualTemplates\_VirtualTemplatesRoot.cshtml" />
+    <Content Include="Views\Rewards.cshtml" />
+    <Content Include="Views\LoyaltyProductPagePoint\Index.cshtml" />
+    <Content Include="Views\LoyaltyDashboard\Index.cshtml" />
+    <Content Include="Views\AnnexcloudAdminSettings\Index.cshtml" />
+    <Content Include="Views\Refer\Index.cshtml" />
+    <Content Include="Views\ReferUnlockCode\Index.cshtml" />
+    <Content Include="Views\ReferProduct\Index.cshtml" />
+    <Content Include="Views\ReferLanding\Index.cshtml" />
+    <Content Include="Views\ReferAdminSettings\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\annexcloud - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\annexcloud - Web Deploy.pubxml" />
+    <Content Include="Views\Shared\_Admin.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

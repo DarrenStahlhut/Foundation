@@ -13,10 +13,11 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Owin;
 using Foundation.Infrastructure.Services;
+using Foundation.Commerce.Order.ViewModelFactories;
 
 namespace Foundation.Infrastructure
 {
-    [ModuleDependency(typeof(EPiServer.Commerce.Initialization.InitializationModule), typeof(Cms.Initialize), typeof(EPiServer.ServiceApi.IntegrationInitialization))]
+    [ModuleDependency(typeof(EPiServer.Commerce.Initialization.InitializationModule), typeof(Cms.Initialize), typeof(Commerce.Initialize), typeof(EPiServer.ServiceApi.IntegrationInitialization))]
     public class InitializeSite : IConfigurableModule
     {
         public void ConfigureContainer(ServiceConfigurationContext context)

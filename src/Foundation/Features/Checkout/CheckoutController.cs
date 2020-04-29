@@ -1,4 +1,5 @@
-﻿using EPiServer;
+﻿using AnnexCloud;
+using EPiServer;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Commerce.Order;
 using EPiServer.Core;
@@ -6,6 +7,7 @@ using EPiServer.Framework.Localization;
 using EPiServer.Web.Mvc;
 using EPiServer.Web.Mvc.Html;
 using EPiServer.Web.Routing;
+using Foundation.Cms.Extensions;
 using Foundation.Cms.Identity;
 using Foundation.Commerce;
 using Foundation.Commerce.Customer.Services;
@@ -15,6 +17,7 @@ using Foundation.Commerce.Order.Services;
 using Foundation.Commerce.Order.ViewModelFactories;
 using Foundation.Commerce.Order.ViewModels;
 using Foundation.Commerce.Personalization;
+using Foundation.Infrastructure;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -251,6 +254,15 @@ namespace Foundation.Features.Checkout
             return PartialView(viewModel);
         }
 
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult Rewards(CheckoutPage currentPage)
+        {
+            var viewModel = CreateCheckoutViewModel(currentPage);
+            viewModel.OrderSummary = _orderSummaryViewModelFactory.CreateOrderSummaryViewModel(CartWithValidationIssues.Cart);
+            return View("Rewards", viewModel);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCouponCode(CheckoutPage currentPage, string couponCode)
@@ -342,7 +354,7 @@ namespace Foundation.Features.Checkout
             _checkoutService.UpdateShippingAddresses(CartWithValidationIssues.Cart, viewModel);
 
             _checkoutService.CreateAndAddPaymentToCart(CartWithValidationIssues.Cart, viewModel);
-
+            var cartTotal = CartWithValidationIssues.Cart.GetTotal();
             var purchaseOrder = _checkoutService.PlaceOrder(CartWithValidationIssues.Cart, ModelState, viewModel);
             if (purchaseOrder == null)
             {
@@ -365,6 +377,8 @@ namespace Foundation.Features.Checkout
             var confirmationSentSuccessfully = _checkoutService.SendConfirmation(viewModel, purchaseOrder);
             //await _checkoutService.CreateOrUpdateBoughtProductsProfileStore(CartWithValidationIssues.Cart);
             //await _checkoutService.CreateBoughtProductsSegments(CartWithValidationIssues.Cart);
+            var couponname = purchaseOrder.GetFirstForm().CouponCodes;
+            
             await _recommendationService.TrackOrder(HttpContext, purchaseOrder);
 
             return Redirect(_checkoutService.BuildRedirectionUrl(viewModel, purchaseOrder, confirmationSentSuccessfully));
@@ -516,6 +530,29 @@ namespace Foundation.Features.Checkout
         public ActionResult UpdateShippingMethods(CheckoutViewModel viewModel)
         {
             _checkoutService.UpdateShippingMethods(CartWithValidationIssues.Cart, viewModel.Shipments);
+            _checkoutService.ApplyDiscounts(CartWithValidationIssues.Cart);
+            _orderRepository.Save(CartWithValidationIssues.Cart);
+            return RedirectToAction("Rewards", "Checkout");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateRewards(string reward)
+        {
+            if (reward.IsNullOrEmpty())
+            {
+                return RedirectToAction("BillingInformation", "Checkout");
+            }
+            
+            decimal.TryParse(reward.Replace("OFF", "").Replace("$", ""), out var amount);
+            if (amount == 0)
+            {
+                return RedirectToAction("BillingInformation", "Checkout");
+            }
+
+            CartWithValidationIssues.Cart.SetManualDiscount(amount);
+            CartWithValidationIssues.Cart.SetManualDiscountCode(reward);
+            CartWithValidationIssues.Cart.GetFirstForm().CouponCodes.Add(reward);
             _checkoutService.ApplyDiscounts(CartWithValidationIssues.Cart);
             _orderRepository.Save(CartWithValidationIssues.Cart);
             return RedirectToAction("BillingInformation", "Checkout");

@@ -11,5 +11,6 @@ namespace Foundation.Demo.ViewModels
         public ReviewsViewModel Reviews { get; set; }
         public IEnumerable<Recommendation> AlternativeProducts { get; set; }
         public IEnumerable<Recommendation> CrossSellProducts { get; set; }
+        public string Points { get; set; }
     }
 }

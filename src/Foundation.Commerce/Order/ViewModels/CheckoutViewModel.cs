@@ -78,7 +78,7 @@ namespace Foundation.Commerce.Order.ViewModels
 
         public string SelectedPayment { get; set; }
 
-        public OrderSummaryViewModel OrderSummary { get; set; }
+        public virtual OrderSummaryViewModel OrderSummary { get; set; }
 
         /// <summary>
         /// Gets the name of the checkout view required depending on the number of distinct shipping addresses.

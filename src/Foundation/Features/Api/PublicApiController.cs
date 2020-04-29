@@ -1,4 +1,5 @@
-﻿using EPiServer;
+﻿using AnnexCloud;
+using EPiServer;
 using EPiServer.Core;
 using EPiServer.Framework.Localization;
 using EPiServer.Web.Routing;
@@ -9,8 +10,6 @@ using Foundation.Cms.Personalization;
 using Foundation.Commerce.Customer.Services;
 using Foundation.Commerce.Customer.ViewModels;
 using Foundation.Infrastructure.Services;
-using Mediachase.Commerce.Customers;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -32,6 +31,7 @@ namespace Foundation.Features.Api
         private readonly IUrlResolver _urlResolver;
         private readonly ICmsTrackingService _cmsTrackingService;
         private readonly HttpContextBase _httpContextBase;
+        private readonly LoyaltyApiService _loyaltyApiService = new LoyaltyApiService();
 
         public PublicApiController(LocalizationService localizationService,
             IContentLoader contentLoader,
@@ -115,7 +115,7 @@ namespace Foundation.Features.Api
             if (registration.IdentityResult.Succeeded)
             {
                 if (registration.FoundationContact != null) _addressBookService.Save(viewModel.Address, registration.FoundationContact);
-
+                _loyaltyApiService.GetUserDetails(user.FirstName, user.LastName, user.Email);
                 return new EmptyResult();
             }
             else

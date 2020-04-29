@@ -1,4 +1,5 @@
-﻿using EPiServer.Commerce.Marketing;
+﻿using AnnexCloud;
+using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using Foundation.Commerce.Markets;
 using Foundation.Commerce.Order.ViewModels;
@@ -9,9 +10,9 @@ namespace Foundation.Commerce.Order.ViewModelFactories
 {
     public class OrderSummaryViewModelFactory
     {
-        private readonly IOrderGroupCalculator _orderGroupCalculator;
-        private readonly IShippingCalculator _shippingCalculator;
-        private readonly ICurrencyService _currencyService;
+        protected readonly IOrderGroupCalculator _orderGroupCalculator;
+        protected readonly IShippingCalculator _shippingCalculator;
+        protected readonly ICurrencyService _currencyService;
 
         public OrderSummaryViewModelFactory(
             IOrderGroupCalculator orderGroupCalculator,
@@ -31,6 +32,8 @@ namespace Foundation.Commerce.Order.ViewModelFactories
             }
 
             var totals = _orderGroupCalculator.GetOrderGroupTotals(cart);
+            var rewardsApiService = new RewardsApiService();
+            var loyaltyApiService = new LoyaltyApiService();
 
             return new OrderSummaryViewModel
             {
@@ -47,7 +50,9 @@ namespace Foundation.Commerce.Order.ViewModelFactories
                 {
                     Discount = new Money(x.SavedAmount, new Currency(cart.Currency)),
                     DisplayName = x.Description
-                })
+                }),
+                Rewards = rewardsApiService.Getrewards(totals.Total),
+                Points = loyaltyApiService.DisplayEarnPointsonCart(totals.SubTotal.Amount)
             };
         }
 

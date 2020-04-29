@@ -1,4 +1,5 @@
-﻿using EPiServer.Commerce.Order;
+﻿using AnnexCloud;
+using EPiServer.Commerce.Order;
 using EPiServer.Core;
 using EPiServer.Editor;
 using EPiServer.Web.Mvc.Html;
@@ -7,6 +8,7 @@ using Foundation.Commerce.Customer.Services;
 using Foundation.Commerce.Models.Pages;
 using Foundation.Commerce.Order.Services;
 using Foundation.Infrastructure.Services;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Foundation.Features.MyAccount.OrderConfirmation
@@ -41,6 +43,7 @@ namespace Foundation.Features.MyAccount.OrderConfirmation
                 var viewModel = CreateViewModel(currentPage, order);
                 viewModel.NotificationMessage = notificationMessage;
 
+                var service = new SaletrackApiService(order.GetTotal(), order.Forms.First().CouponCodes, order);
                 _campaignService.UpdateLastOrderDate();
                 _campaignService.UpdatePoint(decimal.ToInt16(viewModel.SubTotal.Amount));
 

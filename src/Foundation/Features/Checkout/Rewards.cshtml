@@ -1,0 +1,55 @@
+﻿@model CheckoutViewModel
+@{
+    if (Request.IsAjaxRequest())
+    {
+        Layout = null;
+    }
+}
+@Html.Partial("_CheckoutStatusBar", 4)
+
+<div class="col-12">
+    <form class="jsCheckoutForm" action="@Url.Action("UpdateRewards", "Checkout")" method="post">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                @if (!String.IsNullOrEmpty(Model.OrderSummary.Points))
+                {
+                    <h3>You will Earn @Model.OrderSummary.Points Points. </h3>
+                }
+            </div>
+            <div class="col-sm-12 col-md-6">
+                @if (Model.OrderSummary.Rewards != null)
+                {
+                    <h3>@Html.TranslateFallback("Redeem Loyalty Reward", "Redeem Loyalty Reward")</h3>
+                    <div class="form-group">
+                        @{
+                            var values = new List<KeyValuePair<string, string>>();
+                            foreach (var a in Model.OrderSummary.Rewards)
+                            {
+                                values.Add(new KeyValuePair<string, string>(a.Text, a.Text));
+                            }
+                        }
+                        @Helpers.RenderDropdown(values, name: "reward")
+
+                    </div>
+
+                }
+            </div>
+        </div>
+        
+
+        
+        <div class="row checkout__block">
+            <div class="col-12 checkout__btn-group">
+                <a class="account-link" href="@Url.Action("ShippingInformation", new { node = Model.CurrentContent.ContentLink })" title="@Html.TranslateFallback("/Shared/Back", "Back")">
+                    <span>
+                        @Html.TranslateFallback("/Shared/Back", "Back")
+                    </span>
+                </a>
+                <button class="button-black" type="submit">
+                    <span>@Html.TranslateFallback("/Shared/Continue", "Continue")</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

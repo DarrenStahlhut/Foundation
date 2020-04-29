@@ -58,6 +58,9 @@ namespace Foundation.Commerce.Extensions
             TryAddMetaField(orderContext, purchaseOrderMetaClass, Constant.Customer.CurrentCustomerOrganization, MetaDataType.ShortString, 512);
             TryAddMetaField(orderContext, purchaseOrderMetaClass, Constant.Customer.CustomerFullName, MetaDataType.ShortString, 512);
             TryAddMetaField(orderContext, purchaseOrderMetaClass, Constant.Customer.CustomerEmailAddress, MetaDataType.ShortString, 512);
+
+            TryAddMetaField(orderContext, purchaseOrderMetaClass, "ManualDiscountValue", MetaDataType.Decimal, 17, false, false, false);
+            TryAddMetaField(orderContext, purchaseOrderMetaClass, "ManualDiscountCode", MetaDataType.ShortString, 512);
         }
 
         private static void AddBusinessFoundationIfNeccessary()

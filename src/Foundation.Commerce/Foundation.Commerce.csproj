@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AnnexCloudLoyalty" Version="1.0.7200.28847" />
     <PackageReference Include="EPiServer.CMS.AspNet" Version="11.13.1" />
     <PackageReference Include="EPiServer.CMS.Core" Version="11.13.1" />
     <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.22.0" />

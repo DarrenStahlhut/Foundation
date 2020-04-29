@@ -1,13 +1,12 @@
-﻿using EPiServer;
+﻿using AnnexCloud;
+using EPiServer;
 using EPiServer.Commerce.Catalog.ContentTypes;
-using EPiServer.Core;
 using EPiServer.Web.Routing;
 using Foundation.Cms;
 using Foundation.Commerce.Catalog.ViewModels;
 using Foundation.Commerce.Customer.Services;
 using Foundation.Commerce.Extensions;
 using Foundation.Commerce.Models.Catalog;
-using Foundation.Commerce.Models.Pages;
 using Foundation.Commerce.Personalization;
 using Foundation.Demo.ViewModels;
 using Foundation.Social.Services;
@@ -55,9 +54,11 @@ namespace Foundation.Features.CatalogContent.Product
 
             await AddInfomationViewModel(viewModel, currentContent.Code, skipTracking);
 
-            var startPage = _contentLoader.Get<PageData>(ContentReference.StartPage) as CommerceHomePage;
             currentContent.AddBrowseHistory();
             viewModel.BreadCrumb = GetBreadCrumb(currentContent.Code);
+
+            var loyaltyApiService = new LoyaltyApiService();
+            viewModel.Points = loyaltyApiService.DisplayEarnPointsonProductPage(viewModel.DiscountedPrice?.Amount ?? viewModel.ListingPrice.Amount);
             return View(viewModel);
         }
 
